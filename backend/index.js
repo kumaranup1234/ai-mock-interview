@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/authRoutes');
+const {authenticateUser} = require("./middlewares/authMiddleware");
+
 
 const app = express();
 app.set('trust proxy', 1)
@@ -24,9 +26,11 @@ app.use(cors({
 app.use(express.json());
 
 // root route to check is api running
-app.get("/", (req, res) => {
+app.get("/",authenticateUser, (req, res) => {
+    console.log(req.user);
     res.status(200).json({ message: "API is running successfully!" });
 });
+
 
 // user-related routes
 //app.use('/api/users', userRoutes);
