@@ -28,6 +28,22 @@ app.use(cors({
 
 app.use(express.json());
 
+const connectDB = async () => {
+    try{
+        await connect(MONGO_URI, {
+            serverSelectionTimeoutMS:10000,
+        });
+        console.log('Connected to MongoDB');
+    } catch(error) {
+        console.error('Error connecting to MongoDB:',error.message);
+        console.error('Stack Traces :',error.stack);
+        process.exit(1);
+    }
+};
+
+connectDB();
+
+
 // root route to check is api running
 app.get("/", (req, res) => {
     console.log(req.user);
